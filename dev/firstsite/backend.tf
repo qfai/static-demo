@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "IacAutomationTest"
     storage_account_name = "iacautomationbackend"
     container_name       = "staticdemo"
-    key                  = "{{.GroupName}}.tfstate"
+    key                  = "firstsite.tfstate"
   }
 }

@@ -11,10 +11,6 @@ variable "rpServicePrincipalObjectId" {
 variable "siteId" {
   type        = string
   description = "A unique identifier for the site."
-  validation {
-    condition     = length(var.siteId) < 9 && length(var.siteId) > 0
-    error_message = "value of siteId should be less than 9 characters and greater than 0 characters"
-  }
 }
 
 variable "servers" {
