@@ -11,10 +11,6 @@ variable "rpServicePrincipalObjectId" {
 variable "siteId" {
   type        = string
   description = "A unique identifier for the site."
-  validation {
-    condition     = length(var.siteId) < 9 && length(var.siteId) > 0
-    error_message = "value of siteId should be less than 9 characters and greater than 0 characters"
-  }
 }
 
 variable "servers" {
@@ -133,7 +129,7 @@ variable "clusterName" {
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
   validation {
     condition     = length(var.clusterName) < 16 && length(var.clusterName) > 0
-    error_message = "value of clusterName should be less than 16 characters and greater than 0 characters"
+    error_message = "value of clusterName should be less than 16 characters and greater than 0 characters because the limitation of AD"
   }
 }
 

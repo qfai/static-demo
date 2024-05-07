@@ -2,6 +2,7 @@ resource "azapi_resource" "address" {
   count     = var.country == "" ? 0 : 1
   type      = "Microsoft.EdgeOrder/addresses@2024-02-01"
   parent_id = var.resourceGroup.id
+  //the name can't greater than 24
   name      = var.siteId
   location  = var.resourceGroup.location
   body = {
