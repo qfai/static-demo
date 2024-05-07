@@ -1,7 +1,7 @@
 module "base" {
   source          = "../../modules/base"
   location        = "eastus"
-  siteId          = "testwhythesiteidhasmaxlength"
+  siteId          = "testwhythesiteidhasmaxle"
   domainFqdn      = "jumpstart.local"
   startingAddress = "192.168.1.55"
   endingAddress   = "192.168.1.65"
