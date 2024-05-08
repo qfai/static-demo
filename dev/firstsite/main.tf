@@ -1,7 +1,7 @@
 module "base" {
   source          = "../../modules/base"
   location        = "eastus"
-  siteId          = "testwhythesi"
+  siteId          = "testwhythe"
   domainFqdn      = "jumpstart.local"
   startingAddress = "192.168.1.55"
   endingAddress   = "192.168.1.65"
@@ -81,4 +81,5 @@ module "base" {
     "AzSHOST2" = 25985
   }
   virtualHostIp = "10.1.0.6"
+  destory_adou  = true
 }
