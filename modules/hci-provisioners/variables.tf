@@ -68,7 +68,7 @@ variable "deploymentUserPassword" {
   type        = string
   description = "The password for deployment user."
   validation {
-    condition = length(var.password) >= 12 && can(regex("[a-z]", var.password)) && can(regex("[A-Z]", var.password)) && can(regex("[0-9]", var.password)) && can(regex("[!@#$%^&*(),.?\":{}|<>]", var.password))
+    condition = length(var.deploymentUserPassword) >= 12 && can(regex("[a-z]", var.deploymentUserPassword)) && can(regex("[A-Z]", var.deploymentUserPassword)) && can(regex("[0-9]", var.deploymentUserPassword)) && can(regex("[!@#$%^&*(),.?\":{}|<>]", var.deploymentUserPassword))
     error_message = "Use a password that is at least 12 characters long and contains: a lowercase character, an uppercase character, a numeral, and a special character."
   }
 }
