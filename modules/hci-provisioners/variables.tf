@@ -58,8 +58,9 @@ variable "deploymentUser" {
   type        = string
   description = "The username for deployment user."
   validation {
-    condition = length(var.deploymentUser) < 65 && length(var.deploymentUser) > 0 && can(regex("^[a-zA-Z_][a-zA-Z0-9_-]*$", var.deploymentUser))
-    error_message = "Username must be between 1 to 64 characters and only contain letters, numbers, hyphens, and underscores and may not start with a hyphen or number."
+    condition = length(var.deploymentUser) < 21 && length(var.deploymentUser) > 0 && can(regex("^[a-zA-Z_][a-zA-Z0-9_-]*$", var.deploymentUser))
+    error_message = "Username must be between 1 to 20 characters and only contain letters, numbers, hyphens, and underscores and may not start with a hyphen or number."
+    //20 character limit for sAMAccountName.
   }
 }
 
@@ -67,10 +68,6 @@ variable "deploymentUserPassword" {
   sensitive   = true
   type        = string
   description = "The password for deployment user."
-  validation {
-    condition = length(var.deploymentUserPassword) >= 12 && can(regex("[a-z]", var.deploymentUserPassword)) && can(regex("[A-Z]", var.deploymentUserPassword)) && can(regex("[0-9]", var.deploymentUserPassword)) && can(regex("[!@#$%^&*(),.?\":{}|<>]", var.deploymentUserPassword))
-    error_message = "Use a password that is at least 12 characters long and contains: a lowercase character, an uppercase character, a numeral, and a special character."
-  }
 }
 
 variable "authenticationMethod" {
