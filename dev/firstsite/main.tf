@@ -81,5 +81,5 @@ module "base" {
     "AzSHOST2" = 25985
   }
   virtualHostIp = "10.1.0.6"
-  destory_adou = true
+  destory_adou  = true
 }
