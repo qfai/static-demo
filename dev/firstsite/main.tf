@@ -80,5 +80,5 @@ module "base" {
     "AzSHOST1" = 15985,
     "AzSHOST2" = 25985
   }
-  virtualHostIp = "10.1.0.4"
+  virtualHostIp = "10.1.0.6"
 }
