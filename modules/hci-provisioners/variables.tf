@@ -57,6 +57,10 @@ variable "localAdminPassword" {
 variable "deploymentUser" {
   type        = string
   description = "The username for deployment user."
+  validation {
+    condition = length(var.deploymentUser) < 17 && length(var.deploymentUser) > 0
+    error_message = "value of deploymentUser should be less than 17 characters and greater than 0 characters"
+  }
 }
 
 variable "deploymentUserPassword" {
