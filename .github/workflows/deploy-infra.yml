@@ -15,6 +15,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
          - run: echo "running dev stage"
+    contoso:
+        uses: ./.github/workflows/site-cd-workflow.yml
+        with:
+            working-directory: dev/contoso
+        secrets: inherit
+        needs: [dev]
     firstsite:
         uses: ./.github/workflows/site-cd-workflow.yml
         with:
@@ -29,7 +35,7 @@ jobs:
         needs: [dev]
     qa:
         name: qa
-        needs: [dev,firstsite,iac142]
+        needs: [dev,contoso,firstsite,iac142]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"
