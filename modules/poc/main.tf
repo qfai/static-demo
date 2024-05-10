@@ -2,52 +2,27 @@ resource "azurerm_resource_group" "rg" {
   name     = local.resourceGroupName
   location = var.location
   tags = {
-    siteId = var.siteId
-  }
-
-  lifecycle {
-    ignore_changes = [tags]
+    siteId = "${var.siteId}"
   }
 }
 
-module "site-manager" {
-  source          = "../site-manager"
-  siteId          = var.siteId
-  resourceGroup   = azurerm_resource_group.rg
-  country         = var.country
-  city            = var.city
-  companyName     = var.companyName
-  postalCode      = var.postalCode
-  stateOrProvince = var.stateOrProvince
-  streetAddress1  = var.streetAddress1
-  streetAddress2  = var.streetAddress2
-  streetAddress3  = var.streetAddress3
-  zipExtendedCode = var.zipExtendedCode
-  contactName     = var.contactName
-  emailList       = var.emailList
-  mobile          = var.mobile
-  phone           = var.phone
-  phoneExtension  = var.phoneExtension
-}
-
-//Prepare AD and arc server
-module "hci-provisioners" {
+module "hci0-provisioners" {
+  source                 = "../hci-provisioners"
   depends_on             = [azurerm_resource_group.rg]
   count                  = var.enableProvisioners ? 1 : 0
-  source                 = "../hci-provisioners"
   resourceGroup          = azurerm_resource_group.rg
   siteId                 = var.siteId
   domainFqdn             = var.domainFqdn
   adouPath               = local.adouPath
   domainServerIP         = var.domainServerIP
-  domainAdminUser        = var.domainAdminUser
-  domainAdminPassword    = var.domainAdminPassword
   authenticationMethod   = var.authenticationMethod
   servers                = var.servers
   clusterName            = local.clusterName
   subscriptionId         = var.subscriptionId
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
+  domainAdminUser        = var.domainAdminUser
+  domainAdminPassword    = var.domainAdminPassword
   deploymentUser         = local.deploymentUserName
   deploymentUserPassword = var.deploymentUserPassword
   servicePrincipalId     = var.servicePrincipalId
@@ -58,13 +33,12 @@ module "hci-provisioners" {
   serverPorts            = var.serverPorts
 }
 
-module "hci" {
-  depends_on                    = [module.hci-provisioners]
+module "hci0" {
   source                        = "../hci"
+  depends_on                    = [module.hci0-provisioners]
   resourceGroup                 = azurerm_resource_group.rg
   siteId                        = var.siteId
   domainFqdn                    = var.domainFqdn
-  subnetMask                    = var.subnetMask
   startingAddress               = var.startingAddress
   endingAddress                 = var.endingAddress
   defaultGateway                = var.defaultGateway
@@ -88,18 +62,19 @@ module "hci" {
   servicePrincipalId            = var.servicePrincipalId
   servicePrincipalSecret        = var.servicePrincipalSecret
   rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
+  isExported                    = var.isExported
 }
 
 locals {
   serverNames = [for server in var.servers : server.name]
 }
 
-module "extension" {
+module "hci0-extensions" {
   source                     = "../hci-extensions"
-  depends_on                 = [module.hci]
+  depends_on                 = [module.hci0]
   resourceGroup              = azurerm_resource_group.rg
   siteId                     = var.siteId
-  arcSettingsId              = module.hci.arcSettings.id
+  arcSettingsId              = module.hci0.arcSettings.id
   serverNames                = local.serverNames
   workspaceName              = local.workspaceName
   dataCollectionEndpointName = local.dataCollectionEndpointName
@@ -108,34 +83,29 @@ module "extension" {
   enableAlerts               = var.enableAlerts
 }
 
-module "vm" {
-  count            = var.enableVM ? 1 : 0
-  source           = "../hci-vm"
-  depends_on       = [module.hci]
-  customLocationId = module.hci.customlocation.id
-  resourceGroupId  = azurerm_resource_group.rg.id
-  userStorageId    = module.hci.userStorages[0].id
-  location         = azurerm_resource_group.rg.location
+module "hci0-aksarc0" {
+  source                  = "../aks-arc"
+  depends_on              = [module.hci0]
+  resourceGroup           = azurerm_resource_group.rg
+  customLocationId        = module.hci0.customlocation.id
+  arbId                   = module.hci0.arcbridge.id
+  sshKeyVaultId           = module.hci0.keyvault.id
+  dnsServers              = var.dnsServers
+  defaultGateway          = var.defaultGateway
+  agentPoolProfiles       = var.aksArc0-agentPoolProfiles
+  startingAddress         = var.aksArc0-startingAddress
+  endingAddress           = var.aksArc0-endingAddress
+  addressPrefix           = var.aksArc0-addressPrefix
+  vlanId                  = var.aksArc0-vlanId
+  controlPlaneIp          = var.aksArc0-controlPlaneIp
+  logicalNetworkName      = local.aksArc0-logicalNetworkName
+  aksArcName              = local.aksArc0Name
+  kubernetesVersion       = var.aksArc0-kubernetesVersion
+  controlPlaneCount       = var.aksArc0-controlPlaneCount
+  controlPlaneVmSize      = var.aksArc0-controlPlaneVmSize
+  enableAzureRBAC         = var.aksArc0-enableAzureRBAC
+  rbacAdminGroupObjectIds = var.aksArc0-rbacAdminGroupObjectIds
+  sshPublicKey            = var.aksArc0-sshPublicKey
+  isExported              = var.isExported
 }
 
-module "aks-arc" {
-  source                  = "../aks-arc"
-  depends_on              = [module.hci]
-  customLocationId        = module.hci.customlocation.id
-  resourceGroup           = azurerm_resource_group.rg
-  agentPoolProfiles       = var.agentPoolProfiles
-  sshKeyVaultId           = module.hci.keyvault.id
-  startingAddress         = var.aksArc-lnet-startingAddress
-  endingAddress           = var.aksArc-lnet-endingAddress
-  dnsServers              = var.aksArc-lnet-dnsServers == [] ? var.dnsServers : var.aksArc-lnet-dnsServers
-  defaultGateway          = var.aksArc-lnet-defaultGateway == "" ? var.defaultGateway : var.aksArc-lnet-defaultGateway
-  addressPrefix           = var.aksArc-lnet-addressPrefix
-  logicalNetworkName      = local.logicalNetworkName
-  aksArcName              = local.aksArcName
-  vlanId                  = var.aksArc-lnet-vlanId
-  controlPlaneIp          = var.aksArc-controlPlaneIp
-  arbId                   = module.hci.arcbridge.id
-  kubernetesVersion       = var.kubernetesVersion
-  controlPlaneCount       = var.controlPlaneCount
-  rbacAdminGroupObjectIds = var.rbacAdminGroupObjectIds
-}

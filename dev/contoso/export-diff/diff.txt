@@ -1,0 +1,49 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.base.module.hci0.azurerm_key_vault_secret.DefaultARBApplication will be updated in-place
+  ~ resource "azurerm_key_vault_secret" "DefaultARBApplication" {
+        id                      = "https://contoso-kv-28.vault.azure.net/secrets/DefaultARBApplication/ca04339eb187441c8e9076d8780e125a"
+        name                    = "DefaultARBApplication"
+        tags                    = {}
+      ~ value                   = (sensitive value)
+        # (6 unchanged attributes hidden)
+    }
+
+  # module.base.module.hci0-aksarc0.data.azurerm_client_config.current will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "azurerm_client_config" "current" {
+      + client_id       = (known after apply)
+      + id              = (known after apply)
+      + object_id       = (known after apply)
+      + subscription_id = (known after apply)
+      + tenant_id       = (known after apply)
+    }
+
+  # module.base.module.hci0-aksarc0.azapi_resource.connectedCluster will be updated in-place
+  ~ resource "azapi_resource" "connectedCluster" {
+      ~ body                      = {
+          ~ properties = {
+              ~ aadProfile                = {
+                  ~ tenantID            = "d9b73d5e-a9d3-41ba-88c3-796a643e3edd" -> (known after apply)
+                    # (2 unchanged attributes hidden)
+                }
+                # (6 unchanged attributes hidden)
+            }
+            # (1 unchanged attribute hidden)
+        }
+        id                        = "/subscriptions/586c20df-c465-4f10-8673-65aa4859e7ca/resourceGroups/contoso-rg/providers/Microsoft.Kubernetes/connectedClusters/contoso-aksArc"
+        name                      = "contoso-aksArc"
+      ~ output                    = {} -> (known after apply)
+      + tags                      = (known after apply)
+        # (7 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 0 to add, 2 to change, 0 to destroy.

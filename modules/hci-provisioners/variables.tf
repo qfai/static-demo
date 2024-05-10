@@ -60,7 +60,7 @@ variable "deploymentUser" {
   validation {
     condition = length(var.deploymentUser) < 21 && length(var.deploymentUser) > 0 && can(regex("^[a-zA-Z_][a-zA-Z0-9_-]*$", var.deploymentUser))
     error_message = "Username must be between 1 to 20 characters and only contain letters, numbers, hyphens, and underscores and may not start with a hyphen or number."
-    //20 character limit for sAMAccountName.
+    //20 character limit for sAMAccountName in ad preparation New-ADUser.
   }
 }
 
@@ -93,11 +93,6 @@ variable "adouPath" {
 variable "subscriptionId" {
   type        = string
   description = "The subscription ID for the Azure account."
-}
-
-variable "tenant" {
-  type        = string
-  description = "The tenant ID for the Azure account."
 }
 
 variable "servicePrincipalId" {
