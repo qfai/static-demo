@@ -2,7 +2,7 @@
 variable "aksArc0-kubernetesVersion" {
   type        = string
   description = "The version of Kubernetes to use for the provisioned cluster."
-  default     = "1.27.3"
+  default     = "1.25.11"
 }
 
 variable "aksArc0-controlPlaneCount" {
@@ -42,19 +42,19 @@ variable "aksArc0-agentPoolProfiles" {
 variable "aksArc0-enableAzureRBAC" {
   type        = bool
   description = "Whether to enable Azure RBAC for the Kubernetes cluster."
-  default     = false
+  default     = true
 }
 
 variable "aksArc0-rbacAdminGroupObjectIds" {
   type        = list(string)
   description = "The object id of the Azure AD group that will be assigned the 'cluster-admin' role in the Kubernetes cluster."
-  default     = []
+  default     = ["1b81c027-029d-434d-9642-376e392bfe65"]
 }
 
 variable "aksArc0-sshPublicKey" {
   type        = string
   description = "The SSH public key that will be used to access the kubernetes cluster nodes. If not specified, a new SSH key pair will be generated."
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTaBXSWWf1myXRduMZ1Yc7ioehjNSIkPzjW1OwmFAyJQH0eB9sKy/DL7BUbuF/lESGI940asQXgD/2/oPZVeawgO3CuCq1H9yn22zU2ETPUMmEu5uHqmClbcKuOZ8pNDDFq4m4kPoXsGxT2UVxJ2lOR6NfKXdFZ1AYt7pQPvaeXSF6CODVpETwhUhFVnpLoNmvSWROU63wGaL7S5Pwqeo+qBg+LiWocba4bIYd9jbCVeG7IKimgDlN73LebwOlq5sY0CwUAZgte6aCd9WMZR/4NwlpvHOABvzOIpu6PgqkLEGtXBxSXvoB2eY+j1h+HGulfsvRhkmQKOftWp0Y8/gcJ49CSFVHgOh6iiAlePiI3SbhCOiAmaTSxBbLgUtZwBC1mYzoNdOaOavLue5jNgOdZ4F0g4dja3Ffenysz+5uwgB69xX5/uHgWOfUFJ33GSwxzkVgP65yit5zDoJwqbAasuFyxac+mQtE5izBbcp6Oy2KOW466fdsnxGv7EKYwtsyksub8MQIG4MhXF14Zl+RDy1lK99GT8uIPVGc2vrIq8KX8ZwfNAvOEp5RmpEfpGy1exKhvqJFEdkPb7V1G90ZzRSlo97xfVgJTF0MXwBNYv1OryE/gs0hzENo3ewqWei/LtQwy4I6EBbkBRfn8l747jWlJt8T/9rtli/q+nPkUw=="
+  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMPRywIvmM+MXzoWYkLq9XJlQpOQTQmIsyvP24OxWR7F6BtSV/a4KjDnQQlJezy2ACANFSuYUL8ym69/JIknvQpF0MUc13jN8EftOQ0znxSSGUDTJxOxzBTVRMbxR6Lb+lETA1l0UZ1/n180gYv2lVrzAqgbbXW88tlkq9f93Uz7u0brHOhsfqrRDxqOIZ3FZSjG+CNFJFq8u8e8/FXPHOhkrD7ECbAz5I6fe5jchOKRG0Cv50WeTvrZMv3rmdCYgNbZB0OSqgsyusc8I3lhtxShxBfBJ3jjsx34Gpu2jvfn5VfTkPdzTkLGoezCtp1o5T/QemHLqST3DizhRIFYuowson4p16s+yNYx54q0VgjSCMRc+UqiSlocDzaipWIzyfmY/KY1bb+eh9ig6Bslw0+m+j0XlVv27a2Tdac4F8k8to03FYYNAV1kKr4VqKYHOil2O1dlfobmKfK9POznzhhCvpX/dNuOcImd0iEOCwZIkreMI2KNG3M30lJkGYobgR6BoT4Vq+fvqLaVDF1pRHkTcJcWUoOd1wAnAzNNt58bKZUs+FVY0V4u6qcJVUkOQ5vAMyIbixLuGRPsKp0WZ5si/DJ4/NB6Ya9yxAwKSA7LHrmhJV2toR85BtxurMV92syK5nN7ickC2tebusJdFoBu9SMmbCsLaOEqwp6A1KdQ==\n"
 }
 
 variable "aksArc0-dnsServers" {
