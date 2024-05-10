@@ -27,15 +27,9 @@ jobs:
             working-directory: dev/firstsite
         secrets: inherit
         needs: [dev]
-    iac142:
-        uses: ./.github/workflows/site-cd-workflow.yml
-        with:
-            working-directory: dev/iac142
-        secrets: inherit
-        needs: [dev]
     qa:
         name: qa
-        needs: [dev,contoso,firstsite,iac142]
+        needs: [dev,contoso,firstsite]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"
